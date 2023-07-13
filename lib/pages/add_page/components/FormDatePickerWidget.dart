@@ -58,6 +58,8 @@ class FormDatePickerWidget extends StatelessWidget {
 
   Future<dynamic> FormDateOicker(BuildContext context, double height) {
     String headerString = '';
+    DateTime selDate = formDateRangePickerController.selectedDate!;
+    String selectedDate = DateFormat('dd MMMM yyyy').format(selDate).toString();
     return showDialog(
       context: context,
       builder: (context) {
@@ -229,10 +231,22 @@ class FormDatePickerWidget extends StatelessWidget {
                             .add(Duration(days: totalVisibleDays ~/ 2));
                         headerString =
                             DateFormat('MMMM yyyy').format(midDate).toString();
+
                         SchedulerBinding.instance!
                             .addPostFrameCallback((duration) {
                           setState(() {});
                         });
+                      },
+                      onSelectionChanged: (DateRangePickerSelectionChangedArgs
+                          dateRangePickerSelectionChangedArgs) {
+                        final DateTime selDate =
+                            dateRangePickerSelectionChangedArgs.value;
+
+                        selectedDate = DateFormat('d MMMM yyyy')
+                            .format(selDate)
+                            .toString();
+
+                        setState(() {});
                       },
                     ),
 
@@ -251,7 +265,7 @@ class FormDatePickerWidget extends StatelessWidget {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(headerString),
+                            Text(selectedDate),
                           ],
                         ),
                         Row(
